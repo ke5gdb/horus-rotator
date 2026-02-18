@@ -26,8 +26,8 @@ def check_callsign(callsign):
 
     global callsigns_last_heard
 
-    logging.info(callsigns)
-    logging.info(callsigns_last_heard)
+    # logging.info(callsigns)
+    # logging.info(callsigns_last_heard)
 
     # No callsign list, so point to the packet
     if len(callsigns) == 0:
@@ -51,11 +51,12 @@ def check_callsign(callsign):
             # Add time to timeout for later payloads
             _timeout += timeout
 
-            if (callsigns_last_heard[callsigns.index(call)] - time.time()) < _timeout:
+            if (time.time() - callsigns_last_heard[callsigns.index(call)]) < _timeout:
                 logging.debug(f"Callsign {call} not timed out yet for incoming callsign {callsign}")
                 return False
-            else:
-                return True
+
+    # All callsigns have timed out, go to whatever packet we just received
+    return True
 
 
 def udp_listener_summary_callback(data):
@@ -207,8 +208,8 @@ if __name__ == "__main__":
         ),
         rotctld_host=rotator_ip,
         rotctld_port=rotator_port,
-        rotator_update_rate=3,
-        rotator_update_threshold=5,
+        rotator_update_rate=rotator_update_rate,
+        rotator_update_threshold=rotator_update_threshold,
         rotator_homing_enabled=False,
         rotator_homing_delay=600,
         rotator_home_position=[

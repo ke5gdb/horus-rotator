@@ -239,8 +239,8 @@ class OziListener(object):
         # Timestamp Handling
         # The 'short' timestamp (HH:MM:SS) is always assumed to be in UTC time.
         # To build up a complete datetime object, we use the system's current UTC time, and replace the HH:MM:SS part.
-        _full_time = datetime.utcnow().strftime("%Y-%m-%dT") + _short_time + "Z"
-        _time_dt = parse(_full_time)
+        # _full_time = datetime.utcnow().strftime("%Y-%m-%dT") + _short_time + "Z"
+        # _time_dt = parse(_full_time)
 
         _time_dt = fix_datetime(_short_time)
 
