@@ -152,6 +152,7 @@ if __name__ == "__main__":
     rotator_ip = args.rotator_ip
     rotator_port = args.rotator_port
     rotator_update_threshold = int(args.rotator_update_threshold)
+    rotator_update_rate = int(args.rotator_update_rate)
 
     callsigns = args.callsigns
     timeout = int(args.timeout)
