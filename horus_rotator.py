@@ -38,24 +38,21 @@ def check_callsign(callsign):
         callsigns_last_heard[callsigns.index(callsign)] = time.time()
     else:
         logging.debug(f"Callsign {callsign} not in callsigns")
-        return False
 
     # If first in list (highest priority), return true
     if callsign == callsigns[0]:
         return True
 
-    # Iterate through callsign list and check timeouts.
-    _timeout = 0
-    if len(callsigns) > 1:
-        for call in callsigns:
-            # Add time to timeout for later payloads
-            _timeout += timeout
+    # Only higher-priority callsigns can block this one. Stop at the received callsign
+    # (or iterate the full list if the callsign is unknown).
+    for call in callsigns:
+        if call == callsign:
+            break
+        if (time.time() - callsigns_last_heard[callsigns.index(call)]) < timeout:
+            logging.debug(f"Callsign {call} not timed out yet for incoming callsign {callsign}")
+            return False
 
-            if (time.time() - callsigns_last_heard[callsigns.index(call)]) < _timeout:
-                logging.debug(f"Callsign {call} not timed out yet for incoming callsign {callsign}")
-                return False
-
-    # All callsigns have timed out, go to whatever packet we just received
+    # All higher-priority callsigns have timed out, go to whatever packet we just received
     return True
 
 

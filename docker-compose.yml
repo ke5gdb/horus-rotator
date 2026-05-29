@@ -1,0 +1,33 @@
+services:
+  horus-rotator:
+    build: .
+    container_name: horus-rotator
+    restart: unless-stopped
+    # Host networking so rotctld at 127.0.0.1:4533 on the host is reachable
+    # from inside the container, and the UDP listener binds on the host iface.
+    network_mode: host
+    # Pass the GPS receiver through. Change the path if your device enumerates
+    # differently, or switch to a stable /dev/serial/by-id/... symlink.
+    devices:
+      - /dev/ttyUSB0:/dev/ttyUSB0
+    environment:
+      # Horus UDP input
+      HORUS_UDP_PORT: "55673"
+      # Rotator (rotctld) connection
+      ROTATOR_IP: "127.0.0.1"
+      ROTATOR_PORT: "4533"
+      # Station location (where the rotator is sitting)
+      STATION_LAT: "38.0932"
+      STATION_LON: "-97.9179"
+      # GPS receiver (optional — omit if not using a serial GPS)
+      GPS_DEVICE: "/dev/ttyUSB0"
+      # Callsign filter
+      CALLSIGNS: "K5RWK KE5GDB"
+      # Logging
+      VERBOSE: "true"
+      # Optional, fall through to argparse defaults if unset:
+      # STATION_ALT: "0.0"
+      # CALLSIGN_TIMEOUT: "60"
+      # GPS_BAUDRATE: "38400"
+      # ROTATOR_UPDATE_THRESHOLD: "5"
+      # ROTATOR_UPDATE_RATE: "10"
